@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping List</title>
+</head>
+
+<body>
+
+    <h3>Shopping List</h3>
+
+    <form id="shopping-form">
+        <input id="item-input" type="text" placeholder="Item">
+        <input id="quantity-input" type="number" placeholder="Quantity">
+        <input type="submit" value="Add">
+    </form>
+
+    <table id="shopping-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+
+
+        let shoppingList = JSON.parse(localStorage.getItem('shoppingList')) || [];
+
+        const addItem = (item, quantity) => {
+
+            const newItem = { item, quantity };
+            shoppingList.push(newItem);
+            localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
+            displayList();
+            
+        }
+
+
+        // Display the list of shopping cart below
+
+
+        const displayList = () => {
+
+            const tableBody = document.querySelector('#shopping-table tbody');
+            tableBody.innerHTML = '';
+
+            shoppingList.forEach((item, index) => {
+                let row = document.createElement('tr');
+                let nameCell = document.createElement('td');
+                let quantityCell = document.createElement('td');
+               
+                nameCell.textContent = item.item;
+                quantityCell.textContent = item.quantity;
+                row.appendChild(nameCell);
+                row.appendChild(quantityCell);
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+
+        // Evoking the event listener below so that event can be generated !!
+
+        let shoppingForm = document.getElementById('shopping-form');
+
+        shoppingForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            let itemInput = document.getElementById('item-input');
+            let quantityInput = document.getElementById('quantity-input');
+            addItem(itemInput.value, quantityInput.value);
+            itemInput.value = '';
+            quantityInput.value = '';
+        });
+
+        displayList();
+
+
+    </script>
+
+</body>
+
+</html>
